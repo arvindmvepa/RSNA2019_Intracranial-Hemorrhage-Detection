@@ -169,7 +169,7 @@ if __name__ == '__main__':
     sets.resnet_shortcut = 'A'
 
     sets.n_epochs = 50
-    sets.fold_index = 1
+    sets.fold_index = 0
 
     sets.model_name = r'prue_3dconv'
     sets.save_folder = r'./TReNDs/{}/' \
