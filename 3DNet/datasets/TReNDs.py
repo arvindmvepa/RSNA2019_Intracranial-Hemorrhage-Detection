@@ -139,7 +139,7 @@ class TReNDsDataset(Dataset):
             with h5py.File(filename, 'r') as f:
                 train_img = f['SM_feature'][()].astype(np.float32)
 
-            train_img = train_img.transpose((3,2,1,0))
+            #train_img = train_img.transpose((3,2,1,0))
             # (53, 52, 63, 53)
             train_lbl = lbl
 
@@ -160,8 +160,10 @@ class TReNDsDataset(Dataset):
 
         elif self.mode == "valid":
             filename, _, lbl, id =  self.all_samples[self.valid_index[idx]]
-            train_img = np.load(filename).astype(np.float32)
-            train_img = train_img.transpose((3, 2, 1, 0))
+            #train_img = np.load(filename).astype(np.float32)
+            #train_img = train_img.transpose((3, 2, 1, 0))
+            with h5py.File(filename, 'r') as f:
+                train_img = f['SM_feature'][()].astype(np.float32)
             # (53, 52, 63, 53)
             train_lbl = lbl
 
@@ -170,8 +172,10 @@ class TReNDsDataset(Dataset):
 
         elif self.mode == 'test':
             id, filename, fea, lbl =  self.all_samples[idx]
-            test_img = np.load(filename).astype(np.float32)
-            test_img = test_img.transpose((3, 2, 1, 0))
+            #test_img = np.load(filename).astype(np.float32)
+            #test_img = test_img.transpose((3, 2, 1, 0))
+            with h5py.File(filename, 'r') as f:
+                test_img = f['SM_feature'][()].astype(np.float32)
 
             return str(id), \
                    torch.FloatTensor(test_img)
