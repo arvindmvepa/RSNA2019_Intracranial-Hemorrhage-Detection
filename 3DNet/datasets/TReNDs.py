@@ -16,7 +16,7 @@ from monai.transforms import \
     Rand3DElasticd, RandAffined, \
     Spacingd, Orientationd
 
-root = r'./competition_root'
+root = r'/kaggle/input/trends-assessment-prediction/'
 
 train = pd.read_csv('{}/train_scores.csv'.format(root)).sort_values(by='Id')
 loadings = pd.read_csv('{}/loading.csv'.format(root))
