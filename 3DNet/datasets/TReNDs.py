@@ -17,8 +17,10 @@ from monai.transforms import \
     Spacingd, Orientationd
 
 root = r'/kaggle/input/trends-assessment-prediction'
+print("this is root: {}".format(root))
 
 train = pd.read_csv('{}/train_scores.csv'.format(root)).sort_values(by='Id')
+print("this is length of train: {}".format(len(train)))
 loadings = pd.read_csv('{}/loading.csv'.format(root))
 sample = pd.read_csv('{}/sample_submission.csv'.format(root))
 reveal = pd.read_csv('{}/reveal_ID_site2.csv'.format(root))
