@@ -73,6 +73,7 @@ class TReNDsDataset(Dataset):
             features = ('age', 'domain1_var1', 'domain1_var2', 'domain2_var1', 'domain2_var2')
             data = pd.merge(loadings, train, on='Id').dropna()
             id_train = list(data.Id)
+            print("this is id_train: {}".format(id_train))
             fea_train = np.asarray(data.drop(list(features), axis=1).drop('Id', axis=1))
             lbl_train = np.asarray(data[list(features)])
 
