@@ -18,7 +18,6 @@ from monai.transforms import \
 
 root = r'/kaggle/input/trends-assessment-prediction'
 new_root = r'/kaggle/working/data/trends-assessment-prediction'
-print("new root: {}".format(new_root))
 
 train = pd.read_csv('{}/train_scores.csv'.format(root)).sort_values(by='Id')
 loadings = pd.read_csv('{}/loading.csv'.format(root))
@@ -187,6 +186,7 @@ def run_check_datasets():
         print(m)
 
 def convert_mat2nii2npy():
+    print("new root: {}".format(new_root))
 
     def get_data(filename):
         with h5py.File(filename, 'r') as f:
