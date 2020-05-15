@@ -80,8 +80,8 @@ class TReNDsDataset(Dataset):
                 id = id_train[i]
                 fea = fea_train[i]
                 lbl = lbl_train[i]
-                #filename = os.path.join('{}/fMRI_train_npy/{}.npy'.format(root, id))
-                filename = os.path.join('{}/fMRI_train/{}.mat'.format(root, id))
+                filename = os.path.join('{}/fMRI_train_npy/{}.npy'.format(new_root, id))
+                #filename = os.path.join('{}/fMRI_train/{}.mat'.format(root, id))
                 self.all_samples.append([filename, fea, lbl, str(id)])
             print("number of samples: {}".format(len(self.all_samples)))
 
@@ -122,8 +122,8 @@ class TReNDsDataset(Dataset):
                 fea = fea_test[i]
                 lbl = lbl_test[i]
 
-                #filename = os.path.join('{}/fMRI_test_npy/{}.npy'.format(root, id))
-                filename = os.path.join('{}/fMRI_test/{}.mat'.format(root, id))
+                filename = os.path.join('{}/fMRI_test_npy/{}.npy'.format(root, id))
+                #filename = os.path.join('{}/fMRI_test/{}.mat'.format(root, id))
                 if os.path.exists(filename):
                     self.all_samples.append([id, filename, fea, lbl])
 
@@ -135,11 +135,11 @@ class TReNDsDataset(Dataset):
 
         if self.mode == "train" :
             filename, _, lbl, id =  self.all_samples[self.train_index[idx]]
-            #train_img = np.load(filename).astype(np.float32)
-            with h5py.File(filename, 'r') as f:
-                train_img = f['SM_feature'][()].astype(np.float32)
+            train_img = np.load(filename).astype(np.float32)
+            train_img = train_img.transpose((3,2,1,0))
+            #with h5py.File(filename, 'r') as f:
+            #train_img = f['SM_feature'][()].astype(np.float32)
 
-            #train_img = train_img.transpose((3,2,1,0))
             # (53, 52, 63, 53)
             train_lbl = lbl
 
@@ -160,10 +160,10 @@ class TReNDsDataset(Dataset):
 
         elif self.mode == "valid":
             filename, _, lbl, id =  self.all_samples[self.valid_index[idx]]
-            #train_img = np.load(filename).astype(np.float32)
-            #train_img = train_img.transpose((3, 2, 1, 0))
-            with h5py.File(filename, 'r') as f:
-                train_img = f['SM_feature'][()].astype(np.float32)
+            train_img = np.load(filename).astype(np.float32)
+            train_img = train_img.transpose((3, 2, 1, 0))
+            #with h5py.File(filename, 'r') as f:
+            #train_img = f['SM_feature'][()].astype(np.float32)
             # (53, 52, 63, 53)
             train_lbl = lbl
 
@@ -172,10 +172,10 @@ class TReNDsDataset(Dataset):
 
         elif self.mode == 'test':
             id, filename, fea, lbl =  self.all_samples[idx]
-            #test_img = np.load(filename).astype(np.float32)
-            #test_img = test_img.transpose((3, 2, 1, 0))
-            with h5py.File(filename, 'r') as f:
-                test_img = f['SM_feature'][()].astype(np.float32)
+            test_img = np.load(filename).astype(np.float32)
+            test_img = test_img.transpose((3, 2, 1, 0))
+            #with h5py.File(filename, 'r') as f:
+            #test_img = f['SM_feature'][()].astype(np.float32)
 
             return str(id), \
                    torch.FloatTensor(test_img)
