@@ -17,6 +17,7 @@ from monai.transforms import \
     Spacingd, Orientationd
 
 root = r'/kaggle/input/trends-assessment-prediction'
+new_root = r'/kaggle/working/data/trends-assessment-prediction'
 
 train = pd.read_csv('{}/train_scores.csv'.format(root)).sort_values(by='Id')
 loadings = pd.read_csv('{}/loading.csv'.format(root))
@@ -80,7 +81,7 @@ class TReNDsDataset(Dataset):
                 fea = fea_train[i]
                 lbl = lbl_train[i]
                 #filename = os.path.join('{}/fMRI_train_npy/{}.npy'.format(root, id))
-                filename = os.path.join('{}/fMRI_train/{}.npy'.format(root, id))
+                filename = os.path.join('{}/fMRI_train/{}.mat'.format(root, id))
                 self.all_samples.append([filename, fea, lbl, str(id)])
             print("number of samples: {}".format(len(self.all_samples)))
 
@@ -122,7 +123,7 @@ class TReNDsDataset(Dataset):
                 lbl = lbl_test[i]
 
                 #filename = os.path.join('{}/fMRI_test_npy/{}.npy'.format(root, id))
-                filename = os.path.join('{}/fMRI_test/{}.npy'.format(root, id))
+                filename = os.path.join('{}/fMRI_test/{}.mat'.format(root, id))
                 if os.path.exists(filename):
                     self.all_samples.append([id, filename, fea, lbl])
 
@@ -197,7 +198,7 @@ def convert_mat2nii2npy():
     # train_root = '{}/fMRI_train/'.format(root)
     # train_npy_root = '{}/fMRI_train_npy/'.format(root)
     train_root = '{}/fMRI_test/'.format(root)
-    train_npy_root = '{}/fMRI_test_npy/'.format(root)
+    train_npy_root = '{}/fMRI_test_npy/'.format(new_root)
     os.makedirs(train_npy_root, exist_ok=True)
 
     mats = os.listdir(train_root)
