@@ -17,10 +17,8 @@ from monai.transforms import \
     Spacingd, Orientationd
 
 root = r'/kaggle/input/trends-assessment-prediction'
-print("this is root: {}".format(root))
 
 train = pd.read_csv('{}/train_scores.csv'.format(root)).sort_values(by='Id')
-print("this is length of train: {}".format(len(train)))
 loadings = pd.read_csv('{}/loading.csv'.format(root))
 sample = pd.read_csv('{}/sample_submission.csv'.format(root))
 reveal = pd.read_csv('{}/reveal_ID_site2.csv'.format(root))
@@ -81,12 +79,13 @@ class TReNDsDataset(Dataset):
                 id = id_train[i]
                 fea = fea_train[i]
                 lbl = lbl_train[i]
-                filename = os.path.join('{}/fMRI_train_npy/{}.npy'.format(root, id))
+                #filename = os.path.join('{}/fMRI_train_npy/{}.npy'.format(root, id))
+                filename = os.path.join('{}/fMRI_train/{}.npy'.format(root, id))
                 self.all_samples.append([filename, fea, lbl, str(id)])
+            print("number of samples: {}".format(len(self.all_samples)))
 
             fold = 0
             kf = KFold(n_splits=5, shuffle=True, random_state=1337)
-            print("number of samples: {}".format(len(self.all_samples)))
             for train_index, valid_index in kf.split(self.all_samples):
                 if fold_index == fold:
                     self.train_index = train_index
@@ -122,7 +121,8 @@ class TReNDsDataset(Dataset):
                 fea = fea_test[i]
                 lbl = lbl_test[i]
 
-                filename = os.path.join('{}/fMRI_test_npy/{}.npy'.format(root, id))
+                #filename = os.path.join('{}/fMRI_test_npy/{}.npy'.format(root, id))
+                filename = os.path.join('{}/fMRI_test/{}.npy'.format(root, id))
                 if os.path.exists(filename):
                     self.all_samples.append([id, filename, fea, lbl])
 
@@ -134,7 +134,10 @@ class TReNDsDataset(Dataset):
 
         if self.mode == "train" :
             filename, _, lbl, id =  self.all_samples[self.train_index[idx]]
-            train_img = np.load(filename).astype(np.float32)
+            #train_img = np.load(filename).astype(np.float32)
+            with h5py.File(filename, 'r') as f:
+                train_img = f['SM_feature'][()].astype(np.float32)
+
             train_img = train_img.transpose((3,2,1,0))
             # (53, 52, 63, 53)
             train_lbl = lbl
