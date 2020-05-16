@@ -163,7 +163,7 @@ if __name__ == '__main__':
     sets.resume_path = None
     sets.pretrain_path = None
 
-    sets.batch_size = 32
+    #sets.batch_size = 32
     sets.num_workers = 16
     sets.model_depth = 10
     sets.resnet_shortcut = 'A'
