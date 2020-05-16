@@ -137,7 +137,8 @@ def train(train_loader,valid_loader, model, optimizer, ajust_lr, total_epochs, s
 
             if valid_loss < min_loss:
                 min_loss = valid_loss
-                model_save_path = '{}/epoch_{}_batch_{}_loss_{}.pth.tar'.format(save_folder, epoch, batch_id, valid_loss)
+                #model_save_path = '{}/epoch_{}_batch_{}_loss_{}.pth.tar'.format(save_folder, epoch, batch_id, valid_loss)
+                model_save_path = '{}/checkpoint.pth.tar'.format(save_folder, epoch, batch_id, valid_loss)
 
                 model_save_dir = os.path.dirname(model_save_path)
                 if not os.path.exists(model_save_dir):
@@ -147,11 +148,12 @@ def train(train_loader,valid_loader, model, optimizer, ajust_lr, total_epochs, s
                 print(log_)
                 f.write(log_ + '\n')
 
-                torch.save({'ecpoch': epoch,
-                                    'batch_id': batch_id,
-                                    'state_dict': model.state_dict(),
-                                    'optimizer': optimizer.state_dict()},
-                                    model_save_path)
+                torch.save({'epoch': epoch,
+                            'batch_id': batch_id,
+                            'state_dict': model.state_dict(),
+                            'valid_loss': valid_loss,
+                            'optimizer': optimizer.state_dict()},
+                           model_save_path)
 
     print('Finished training')
     f.close()
