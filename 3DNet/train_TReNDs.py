@@ -168,7 +168,7 @@ if __name__ == '__main__':
     sets.model_depth = 10
     sets.resnet_shortcut = 'A'
 
-    sets.n_epochs = 50
+    #sets.n_epochs = 50
     sets.fold_index = 0
 
     sets.model_name = r'prue_3dconv'
