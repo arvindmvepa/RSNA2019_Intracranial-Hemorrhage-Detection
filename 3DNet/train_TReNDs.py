@@ -167,7 +167,7 @@ if __name__ == '__main__':
 
     #sets.batch_size = 32
     sets.num_workers = 16
-    sets.model_depth = 10
+    #sets.model_depth = 10
     sets.resnet_shortcut = 'A'
 
     #sets.n_epochs = 50
