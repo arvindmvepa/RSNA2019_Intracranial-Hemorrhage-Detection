@@ -163,7 +163,7 @@ if __name__ == '__main__':
     sets = parse_opts()
     sets.no_cuda = False
     sets.resume_path = None
-    sets.pretrain_path = None
+    #sets.pretrain_path = None
 
     #sets.batch_size = 32
     sets.num_workers = 16
