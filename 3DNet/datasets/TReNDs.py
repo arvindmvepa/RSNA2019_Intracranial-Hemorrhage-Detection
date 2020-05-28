@@ -9,6 +9,8 @@ import nilearn as nl
 import torch
 import random
 from tqdm import tqdm
+from glob import glob
+
 
 import monai
 from monai.transforms import \
@@ -16,14 +18,14 @@ from monai.transforms import \
     Rand3DElasticd, RandAffined, \
     Spacingd, Orientationd
 
-root = r'/kaggle/input/trends-assessment-prediction'
+root = r'/kaggle/input'
 new_root = r'/kaggle/working/data/trends-assessment-prediction'
 
-train = pd.read_csv('{}/train_scores.csv'.format(root)).sort_values(by='Id')
-loadings = pd.read_csv('{}/loading.csv'.format(root))
-sample = pd.read_csv('{}/sample_submission.csv'.format(root))
-reveal = pd.read_csv('{}/reveal_ID_site2.csv'.format(root))
-ICN = pd.read_csv('{}/ICN_numbers.csv'.format(root))
+train = pd.read_csv('{}/trend-files/files/train_scores.csv'.format(root)).sort_values(by='Id')
+loadings = pd.read_csv('{}/trend-files/files/loading.csv'.format(root))
+sample = pd.read_csv('{}/trend-files/files/sample_submission.csv'.format(root))
+reveal = pd.read_csv('{}/trend-files/files/reveal_ID_site2.csv'.format(root))
+ICN = pd.read_csv('{}/trend-files/files/ICN_numbers.csv'.format(root))
 
 """
     Load and display a subject's spatial map
@@ -80,8 +82,7 @@ class TReNDsDataset(Dataset):
                 id = id_train[i]
                 fea = fea_train[i]
                 lbl = lbl_train[i]
-                #filename = os.path.join('{}/fMRI_train_npy/{}.npy'.format(new_root, id))
-                filename = os.path.join('{}/fMRI_train/{}.mat'.format(root, id))
+                filename = list(glob('{}/fMRI_train_np*/*/{}.mat'.format(root, id)))[0]
                 self.all_samples.append([filename, fea, lbl, str(id)])
             print("number of samples: {}".format(len(self.all_samples)))
 
@@ -135,10 +136,8 @@ class TReNDsDataset(Dataset):
 
         if self.mode == "train" :
             filename, _, lbl, id =  self.all_samples[self.train_index[idx]]
-            #train_img = np.load(filename).astype(np.float32)
-            #train_img = train_img.transpose((3,2,1,0))
-            with h5py.File(filename, 'r') as f:
-                train_img = f['SM_feature'][()].astype(np.float32)
+            train_img = np.load(filename).astype(np.float32)
+            train_img = train_img.transpose((3,2,1,0))
 
             # (53, 52, 63, 53)
             train_lbl = lbl
@@ -160,10 +159,8 @@ class TReNDsDataset(Dataset):
 
         elif self.mode == "valid":
             filename, _, lbl, id =  self.all_samples[self.valid_index[idx]]
-            #train_img = np.load(filename).astype(np.float32)
-            #train_img = train_img.transpose((3, 2, 1, 0))
-            with h5py.File(filename, 'r') as f:
-                train_img = f['SM_feature'][()].astype(np.float32)
+            train_img = np.load(filename).astype(np.float32)
+            train_img = train_img.transpose((3, 2, 1, 0))
             # (53, 52, 63, 53)
             train_lbl = lbl
 
@@ -172,10 +169,8 @@ class TReNDsDataset(Dataset):
 
         elif self.mode == 'test':
             id, filename, fea, lbl =  self.all_samples[idx]
-            #test_img = np.load(filename).astype(np.float32)
-            #test_img = test_img.transpose((3, 2, 1, 0))
-            with h5py.File(filename, 'r') as f:
-                test_img = f['SM_feature'][()].astype(np.float32)
+            test_img = np.load(filename).astype(np.float32)
+            test_img = test_img.transpose((3, 2, 1, 0))
 
             return str(id), \
                    torch.FloatTensor(test_img)
