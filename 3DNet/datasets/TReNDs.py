@@ -21,11 +21,11 @@ from monai.transforms import \
 root = r'/kaggle/input'
 new_root = r'/kaggle/working/data/trends-assessment-prediction'
 
-train = pd.read_csv('{}/trend-files/files/train_scores.csv'.format(root)).sort_values(by='Id')
-loadings = pd.read_csv('{}/trend-files/files/loading.csv'.format(root))
-sample = pd.read_csv('{}/trend-files/files/sample_submission.csv'.format(root))
-reveal = pd.read_csv('{}/trend-files/files/reveal_ID_site2.csv'.format(root))
-ICN = pd.read_csv('{}/trend-files/files/ICN_numbers.csv'.format(root))
+train = pd.read_csv('{}/trends-files/files/train_scores.csv'.format(root)).sort_values(by='Id')
+loadings = pd.read_csv('{}/trends-files/files/loading.csv'.format(root))
+sample = pd.read_csv('{}/trends-files/files/sample_submission.csv'.format(root))
+reveal = pd.read_csv('{}/trends-files/files/reveal_ID_site2.csv'.format(root))
+ICN = pd.read_csv('{}/trends-files/files/ICN_numbers.csv'.format(root))
 
 """
     Load and display a subject's spatial map
