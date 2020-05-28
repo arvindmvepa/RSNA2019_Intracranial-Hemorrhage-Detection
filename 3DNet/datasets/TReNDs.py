@@ -82,7 +82,7 @@ class TReNDsDataset(Dataset):
                 id = id_train[i]
                 fea = fea_train[i]
                 lbl = lbl_train[i]
-                filename = list(glob('{}/fmri-train*/*/{}.mat'.format(root, id)))[0]
+                filename = list(glob('{}/fmri-train*/*/{}.npy'.format(root, id)))[0]
                 self.all_samples.append([filename, fea, lbl, str(id)])
             print("number of samples: {}".format(len(self.all_samples)))
 
