@@ -24,7 +24,7 @@ def get_features(model, x):
     x = model.module.layer4(x)
 
     x = F.adaptive_avg_pool3d(x, (1, 1, 1))
-    emb_3d = x.view((-1, model.fea_dim))
+    emb_3d = x.view((-1, model.module.fea_dim))
     return emb_3d
 
 
