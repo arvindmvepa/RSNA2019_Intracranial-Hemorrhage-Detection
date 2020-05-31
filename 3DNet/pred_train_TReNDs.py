@@ -28,6 +28,7 @@ def test_features(data_loader, model, sets, save_path):
                     volumes = volumes.cuda()
 
                 features = feature_extractor(volumes)
+                print(features.shape)
                 y_features.append(features.data.cpu().numpy())
                 ids_all += ids
 
