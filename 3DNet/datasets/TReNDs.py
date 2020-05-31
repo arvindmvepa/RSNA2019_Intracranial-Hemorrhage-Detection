@@ -68,7 +68,7 @@ class TReNDsDataset(Dataset):
         self.mode = mode
         self.fold_index = fold_index
 
-        if self.mode=='train' or self.mode=='valid' or self.mode=='valid_tta':
+        if self.mode=='train' or self.mode=='valid' or self.mode=='valid_test' or self.mode=='valid_tta':
             features = ('age', 'domain1_var1', 'domain1_var2', 'domain2_var1', 'domain2_var2')
             data = pd.merge(loadings, train, on='Id').dropna()
             id_train = list(data.Id)
@@ -99,7 +99,7 @@ class TReNDsDataset(Dataset):
                 print('fold index:',fold_index)
                 print('train num:', self.len)
 
-            elif self.mode=='valid' or self.mode=='valid_tta':
+            elif self.mode=='valid' or self.mode=='valid_tta' or self.mode=='valid_test':
                 self.valid_index = [tmp for tmp in self.valid_index if os.path.exists(self.all_samples[tmp][0])]
                 self.len = len(self.valid_index)
                 print('fold index:',fold_index)
@@ -169,6 +169,16 @@ class TReNDsDataset(Dataset):
 
             return torch.FloatTensor(train_img),\
                    torch.FloatTensor(train_lbl)
+
+        elif self.mode == "valid_test":
+            filename, _, lbl, id =  self.all_samples[self.valid_index[idx]]
+            #train_img = np.load(filename).astype(np.float32)
+            #train_img = train_img.transpose((3, 2, 1, 0))
+            with h5py.File(filename, 'r') as f:
+                train_img = f['SM_feature'][()].astype(np.float32)
+            # (53, 52, 63, 53)
+
+            return str(id), torch.FloatTensor(train_img)
 
         elif self.mode == 'test':
             id, filename, fea, lbl =  self.all_samples[idx]
