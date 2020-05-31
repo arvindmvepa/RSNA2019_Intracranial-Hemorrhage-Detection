@@ -85,25 +85,31 @@ class TReNDsDataset(Dataset):
                 self.all_samples.append([filename, fea, lbl, str(id)])
             print("number of samples: {}".format(len(self.all_samples)))
 
-            fold = 0
-            kf = KFold(n_splits=5, shuffle=True, random_state=1337)
-            for train_index, valid_index in kf.split(self.all_samples):
-                if fold_index == fold:
-                    self.train_index = train_index
-                    self.valid_index = valid_index
-                fold+=1
-
-            if self.mode=='train':
-                self.train_index = [tmp for tmp in self.train_index if os.path.exists(self.all_samples[tmp][0])]
-                self.len = len(self.train_index)
-                print('fold index:',fold_index)
-                print('train num:', self.len)
-
-            elif self.mode=='valid' or self.mode=='valid_tta' or self.mode=='valid_test':
+            if self.mode == 'valid_test':
+                self.train_index = None
+                self.valid_index = range(len(self.all_samples))
                 self.valid_index = [tmp for tmp in self.valid_index if os.path.exists(self.all_samples[tmp][0])]
                 self.len = len(self.valid_index)
-                print('fold index:',fold_index)
                 print('valid num:', self.len)
+            else:
+                fold = 0
+                kf = KFold(n_splits=5, shuffle=True, random_state=1337)
+                for train_index, valid_index in kf.split(self.all_samples):
+                    if fold_index == fold:
+                        self.train_index = train_index
+                        self.valid_index = valid_index
+                    fold+=1
+                if self.mode=='train':
+                    self.train_index = [tmp for tmp in self.train_index if os.path.exists(self.all_samples[tmp][0])]
+                    self.len = len(self.train_index)
+                    print('fold index:',fold_index)
+                    print('train num:', self.len)
+
+                elif self.mode=='valid' or self.mode=='valid_tta':
+                    self.valid_index = [tmp for tmp in self.valid_index if os.path.exists(self.all_samples[tmp][0])]
+                    self.len = len(self.valid_index)
+                    print('fold index:',fold_index)
+                    print('valid num:', self.len)
 
         elif  self.mode=='test':
             labels_df = pd.read_csv("{}/train_scores.csv".format(root))

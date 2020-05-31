@@ -98,9 +98,8 @@ if __name__ == '__main__':
         sets.pin_memory = True
 
 
-    for fold_index in [0,1,2,3,4]:
-        valid_dataset = TReNDsDataset(mode='valid_test', fold_index=fold_index)
-        valid_loader = DataLoader(valid_dataset, batch_size=sets.batch_size,
-                                 shuffle=False, num_workers=sets.num_workers,
-                                 pin_memory=sets.pin_memory, drop_last=False)
-        test_features(valid_loader, model, sets, os.path.join(sets.save_folder, 'features.npz'))
+    valid_dataset = TReNDsDataset(mode='valid_test')
+    valid_loader = DataLoader(valid_dataset, batch_size=sets.batch_size,
+                             shuffle=False, num_workers=sets.num_workers,
+                             pin_memory=sets.pin_memory, drop_last=False)
+    test_features(valid_loader, model, sets, os.path.join(sets.save_folder, 'features.npz'))
