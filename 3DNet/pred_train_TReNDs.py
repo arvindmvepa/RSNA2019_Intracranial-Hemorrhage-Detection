@@ -16,7 +16,7 @@ def test_features(data_loader, model, sets, save_path):
     # settings
     print("validation")
     model.eval()
-    feature_extractor = torch.nn.Sequential(*list(model.children())[-1])
+    feature_extractor = torch.nn.Sequential(list(model.children())[-1])
 
     y_features = []
     ids_all = []
