@@ -177,20 +177,6 @@ class ResNet3D(nn.Module):
         out = self.fc(emb_3d)
         return out
 
-    def forward_features(self, x):
-        x = self.conv1( x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = self.layer4(x)
-
-        x = F.adaptive_avg_pool3d(x, (1, 1, 1))
-        emb_3d = x.view((-1, self.fea_dim))
-        return emb_3d
-
 
 def resnet10(**kwargs):
     """Constructs a ResNet-18 model.
