@@ -21,7 +21,7 @@ def test_features(data_loader, model, sets, save_path):
     y_features = []
     ids_all = []
     with torch.no_grad():
-        for batch_data in tqdm(data_loader):
+        for i, batch_data in enumerate(tqdm(data_loader)):
                 # getting data batch
                 ids, volumes = batch_data
                 if not sets.no_cuda:
@@ -31,6 +31,8 @@ def test_features(data_loader, model, sets, save_path):
                 print(features.shape)
                 y_features.append(features.data.cpu().numpy())
                 ids_all += ids
+                if i > 10:
+                    break
 
     y_features = np.concatenate(y_features, axis=0)
     np.savez_compressed(save_path,
