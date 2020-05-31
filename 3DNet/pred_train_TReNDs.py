@@ -14,14 +14,14 @@ import torch.nn.functional as F
 
 
 def get_features(model, x):
-    x = model.conv1(x)
-    x = model.bn1(x)
-    x = model.relu(x)
-    x = model.maxpool(x)
-    x = model.layer1(x)
-    x = model.layer2(x)
-    x = model.layer3(x)
-    x = model.layer4(x)
+    x = model.module.conv1(x)
+    x = model.module.bn1(x)
+    x = model.module.relu(x)
+    x = model.module.maxpool(x)
+    x = model.module.layer1(x)
+    x = model.module.layer2(x)
+    x = model.module.layer3(x)
+    x = model.module.layer4(x)
 
     x = F.adaptive_avg_pool3d(x, (1, 1, 1))
     emb_3d = x.view((-1, model.fea_dim))
