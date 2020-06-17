@@ -72,7 +72,7 @@ def parse_opts():
     )
     parser.add_argument(
         '--pretrain_path',
-        default='/kaggle/input/pretrainmedicalnet/pretrain/resnet_10.pth',
+        default=None,
         type=str,
         help=
         'Path for pretrained model.'
