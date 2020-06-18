@@ -86,6 +86,7 @@ def test(data_loader, model, sets, save_path):
 
 def train(train_loader,valid_loader, model, optimizer, ajust_lr, total_epochs, save_interval, save_folder, sets):
     f = open(os.path.join(save_folder,'log.txt'),'w')
+    f_ = open(os.path.join(save_folder, 'results.txt'), 'w')
 
     # settings
     batches_per_epoch = len(train_loader)
@@ -135,6 +136,18 @@ def train(train_loader,valid_loader, model, optimizer, ajust_lr, total_epochs, s
         if 1:
             valid_loss = valid(valid_loader,model,sets)
 
+            results_ = '{} Batch: {}-{} ({}), ' \ 
+                       'lr = {:.5f}, ' \ 
+                       'train loss = {:.3f}, ' \ 
+                       'valid loss = {:.3f}, ' \
+                       'avg_batch_time = {:.3f} '.format(sets.model_name, epoch, batch_id, batch_id_sp, rate,
+                                                         loss.item(), valid_loss, avg_batch_time)
+            print(results_)
+            f_.write(results_ + '\n')
+            f_.flush()
+
+
+
             if valid_loss < min_loss:
                 min_loss = valid_loss
                 #model_save_path = '{}/epoch_{}_batch_{}_loss_{}.pth.tar'.format(save_folder, epoch, batch_id, valid_loss)
@@ -157,6 +170,7 @@ def train(train_loader,valid_loader, model, optimizer, ajust_lr, total_epochs, s
 
     print('Finished training')
     f.close()
+    f_.close()
 
 if __name__ == '__main__':
 
