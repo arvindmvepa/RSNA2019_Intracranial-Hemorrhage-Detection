@@ -136,9 +136,9 @@ def train(train_loader,valid_loader, model, optimizer, ajust_lr, total_epochs, s
         if 1:
             valid_loss = valid(valid_loader,model,sets)
 
-            results_ = '{} Batch: {}-{} ({}), ' \ 
-                       'lr = {:.5f}, ' \ 
-                       'train loss = {:.3f}, ' \ 
+            results_ = '{} Batch: {}-{} ({}), ' \
+                       'lr = {:.5f}, ' \
+                       'train loss = {:.3f}, ' \
                        'valid loss = {:.3f}, ' \
                        'avg_batch_time = {:.3f} '.format(sets.model_name, epoch, batch_id, batch_id_sp, rate,
                                                          loss.item(), valid_loss, avg_batch_time)
